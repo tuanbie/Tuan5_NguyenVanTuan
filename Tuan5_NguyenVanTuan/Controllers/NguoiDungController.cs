@@ -25,7 +25,7 @@ namespace Tuan5_NguyenVanTuan.Controllers
             var matkhau = collection["matkhau"];
             var MatKhauXacNhan = collection["MatKhauXacNhan"];
             var email = collection["email"];
-            var diachi = collection["Address"];
+            var diachi = collection["diachi"];
             var dienthoai = collection["dienthoai"];
             var ngaysinh = String.Format("{0:MM/dd/yyyy}", collection["ngaysinh"]);
             if (String.IsNullOrEmpty(MatKhauXacNhan))
@@ -33,9 +33,7 @@ namespace Tuan5_NguyenVanTuan.Controllers
                 ViewData["NhapMKXN"] = "Phải nhập mật khẩu xác nhận !";
             }
             else
-            {
-
-            
+            {           
                if(!matkhau.Equals(MatKhauXacNhan))
                 {
                     ViewData["MatKhauGiongNhau"] = "Mật khẩu và mật khẩu xác nhận phải giống nhau!";
@@ -51,7 +49,7 @@ namespace Tuan5_NguyenVanTuan.Controllers
                     kh.ngaysinh = DateTime.Parse(ngaysinh);
                     data.KhachHangs.InsertOnSubmit(kh);
                     data.SubmitChanges();
-                    return RedirectToAction("Login", "NguoiDung");
+                    return RedirectToAction("DangNhap");
                 }
             
             }

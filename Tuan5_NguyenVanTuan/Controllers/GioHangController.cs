@@ -117,49 +117,57 @@ namespace Tuan5_NguyenVanTuan.Controllers
             lstGiohang.Clear();
             return RedirectToAction("GioHang");
         }
-        //[HttpGet]
-        //public ActionResult DatHang()
-        //{
-        //    if (Session["Giohang"] == null)
-        //    {
-        //        return RedirectToAction("Index", "Fashion");
-        //    }
-        //    List<Giohang> gioHangs = Laygiohang();
-        //    ViewBag.TongSoLuong = TongSoLuong();
-        //    ViewBag.TongTien = TongTien();
+        [HttpGet]
+        public ActionResult DatHang()
+        {
+            if (Session["Giohang"] == null)
+            {
+                return RedirectToAction("Index", "Fashion");
+            }
+            List<Giohang> gioHangs = Laygiohang();
+            ViewBag.TongSoLuong = TongSoLuong();
+            ViewBag.TongTien = TongTien();
 
-        //    return View(gioHangs);
-        //}
-        //[HttpPost]
-        //public ActionResult DatHang(FormCollection collection)
-        //{
-        //    DonHang dONDATHANG = new DonHang();
-        //    ChiTietDonHang CTDH = new ChiTietDonHang();
-        //    KhachHang kh = (KhachHang)Session["Taikhoan"];
-        //    List<Giohang> gioHangs = Laygiohang();
-        //    dONDATHANG.makh = kh.makh;
-        //    dONDATHANG.ngaydat = DateTime.Now;
-        //    dONDATHANG.ngaygiao = DateTime.Parse(ngaygiao);
-        //    dONDATHANG.thanhtoan = .Parse(TongTien().ToString());
-        //    dONDATHANG.Tinhtranggiaohang = false;
-        //    dONDATHANG.Dathanhtoan = false;
-        //    data.DONDATHANGs.InsertOnSubmit(dONDATHANG);
-        //    data.SubmitChanges();
-        //    foreach (var item in gioHangs)
-        //    {
-        //        CHITIETDONTHANG CT = new CHITIETDONTHANG();
-        //        //DONDATHANG dONDATHANG = new DONDATHANG();
-        //        CT.MaDonHang = dONDATHANG.MaDonHang;
-        //        CT.MaSP = item.masp;
-        //        CT.Soluong = item.soluong;
-        //        CT.Dongia = (decimal)item.dongia;
-        //        CT.ThanhTien = (decimal)item.thanhtien;
-        //        dONDATHANG.DiaChi = DiaChi;
-        //        data.CHITIETDONTHANGs.InsertOnSubmit(CT);
-        //    }
-        //    data.SubmitChanges();          
-        //    Session["Giohang"] = null;
-        //    return RedirectToAction("XacNhanDonHang", "Giohang");
-        
+            return View(gioHangs);
+        }
+        [HttpPost]
+        public ActionResult DatHang(FormCollection collection)
+        {
+            DonHang dONDATHANG = new DonHang();
+            KhachHang kh = (KhachHang)Session["TaiKhoan"];
+            Sach s = new Sach();
+            List<Giohang> gioHangs = Laygiohang();
+            var ngaygiao = String.Format("{0:MM/dd/yyyy}", collection["NgayGiao"]);
+
+            dONDATHANG.makh = kh.makh;
+            dONDATHANG.ngaydat = DateTime.Now;
+            dONDATHANG.ngaygiao = DateTime.Parse(ngaygiao);
+            dONDATHANG.giaohang = false;
+            dONDATHANG.thanhtoan = false;
+
+            data.DonHangs.InsertOnSubmit(dONDATHANG);
+            data.SubmitChanges();
+            foreach (var item in gioHangs)
+            {
+                ChiTietDonHang CT = new ChiTietDonHang();
+
+                CT.madon = dONDATHANG.madon;
+                CT.masach = item.masach;
+                CT.soluong = item.iSoluong;
+                CT.gia = (decimal)item.giaban;
+                s = data.Saches.Single(n => n.masach == item.masach);
+                s.soluongton -= CT.soluong;
+                data.SubmitChanges();
+                data.ChiTietDonHangs.InsertOnSubmit(CT);
+            }
+            data.SubmitChanges();
+            Session["Giohang"] = null;
+            return RedirectToAction("XacNhanDonHang", "Giohang");
+
+        }
+        public ActionResult XacnhanDonhang()
+        {
+            return View();
+        }
     }
 }
