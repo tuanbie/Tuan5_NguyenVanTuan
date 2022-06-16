@@ -34,5 +34,6 @@ namespace Tuan5_NguyenVanTuan.Controllers
 
             return View();
         }
+
     }
 }
