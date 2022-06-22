@@ -24,8 +24,18 @@
                     <li>@Html.ActionLink("Thể loại", "Index", "TheLoai")</li>
                     <li>@Html.ActionLink("Sách", "ListSach", "Sach")</li>
                     <li>@Html.Partial("~/Views/GioHang/GioHangPartial.cshtml")</li>
-                    <li>@Html.ActionLink("Login", "DangNhap", "NguoiDung")</li>
-                    <li>@Html.ActionLink("Resigter", "DangKy", "NguoiDung")</li>
+                    
+                    
+                    @if (Session["Taikhoan"] == null)
+                    {
+                        <li>@Html.ActionLink("Resigter", "DangKy", "NguoiDung")</li>
+                        <li>@Html.ActionLink("Login", "DangNhap", "NguoiDung")</li>
+                    }
+                    else
+                    {
+                        <li class="Login"><a href="@Url.Action("LogOut","NguoiDung")">Đăng Xuất</a></li>
+                        <li class="Login"><a href="#">Xin Chào @Session["ten"]</a></li>
+                    }
                 </ul>
             </div>
         </div>

@@ -71,6 +71,7 @@ namespace Tuan5_NguyenVanTuan.Controllers
             if (kh != null)
             {
                 Session["Taikhoan"] = kh;
+                Session["ten"] = tendangnhap;
                 ViewBag.ThongBao = "Chúc mừng đăng nhập thành công!";
             }
             else
