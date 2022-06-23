@@ -124,6 +124,10 @@ namespace Tuan5_NguyenVanTuan.Controllers
             {
                 return RedirectToAction("Index", "Fashion");
             }
+            if (Session["Taikhoan"] == null)
+            {
+                return RedirectToAction("DangNhap", "NguoiDung");
+            }
             List<Giohang> gioHangs = Laygiohang();
             ViewBag.TongSoLuong = TongSoLuong();
             ViewBag.TongTien = TongTien();
@@ -144,26 +148,33 @@ namespace Tuan5_NguyenVanTuan.Controllers
             dONDATHANG.ngaygiao = DateTime.Parse(ngaygiao);
             dONDATHANG.giaohang = false;
             dONDATHANG.thanhtoan = false;
-
-            data.DonHangs.InsertOnSubmit(dONDATHANG);
-            data.SubmitChanges();
-            foreach (var item in gioHangs)
+            if (Session["Taikhoan"] == null)
             {
-                ChiTietDonHang CT = new ChiTietDonHang();
-
-                CT.madon = dONDATHANG.madon;
-                CT.masach = item.masach;
-                CT.soluong = item.iSoluong;
-                CT.gia = (decimal)item.giaban;
-                s = data.Saches.Single(n => n.masach == item.masach);
-                s.soluongton -= CT.soluong;
-                data.SubmitChanges();
-                data.ChiTietDonHangs.InsertOnSubmit(CT);
+                return RedirectToAction("DangNhap", "NguoiDung");
             }
-            data.SubmitChanges();
-            Session["Giohang"] = null;
-            return RedirectToAction("XacNhanDonHang", "Giohang");
+            else
+            {
+                data.DonHangs.InsertOnSubmit(dONDATHANG);
+                            data.SubmitChanges();
+                            foreach (var item in gioHangs)
+                            {
+                                ChiTietDonHang CT = new ChiTietDonHang();
 
+                                CT.madon = dONDATHANG.madon;
+                                CT.masach = item.masach;
+                                CT.soluong = item.iSoluong;
+                                CT.gia = (decimal)item.giaban;
+                                s = data.Saches.Single(n => n.masach == item.masach);
+                                s.soluongton -= CT.soluong;
+                                data.SubmitChanges();
+                                data.ChiTietDonHangs.InsertOnSubmit(CT);
+                            }
+                            data.SubmitChanges();
+                            Session["Giohang"] = null;
+                            return RedirectToAction("XacNhanDonHang", "Giohang");
+
+            }
+            
         }
         public ActionResult XacnhanDonhang()
         {

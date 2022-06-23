@@ -87,5 +87,10 @@ namespace Tuan5_NguyenVanTuan.Controllers
             Session["Taikhoan"] = null;
             return RedirectToAction("DangNhap", "NguoiDung");
         }
+        public ActionResult CHeanePass()
+        {
+            Session["Taikhoan"] = null;
+            return RedirectToAction("DangNhap", "NguoiDung");
+        }
     }
 }
